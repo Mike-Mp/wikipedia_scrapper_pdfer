@@ -6,7 +6,31 @@
     <link rel="stylesheet" href="index.css">
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <p>Enter wiki link or search term. The first search term will be used.</p>
+
+    <input type="text" placeholder="enter url or search term" id="url"/>
+    <button id="getPath">Path</button>
+    <button id="pdfyArticle">Pdfy</button>
+    <p>Path: <span id="filePath"></span></p>
+    <p>What to include from the article</p>
+    <hr/>
+    <div class="wikiOptions">
+     <label for="abstract">abstract</label>
+     <input id="abstract" type="checkbox" />
+     <label for="bibliography">bibliography</label>
+     <input type="checkbox" id="bibliography" />
+    </div>
+
+    <p>We are using Node.js <span id="node-version"></span></p>
+    <p>Chromium <span id="chrome-version"></span></p>
+    <p>Electron <span id="electron-version"></span></p>
+
+    <webview
+    style="min-height: 85vh;"
+    src="https://www.whatismybrowser.com/detect/what-is-my-user-agent"
+    useragent="My Super Browser v1.0 Youpi Tralala !">
+    </webview>
+
+    <script src='./functions/generalFunctions.js'></script>
   </body>
 </html>

@@ -1,10 +1,9 @@
 const {app , BrowserWindow, dialog, ipcMain} = require('electron');
 const path = require('path');
-const pie = require("puppeteer-in-electron")
-const puppeteer = require("puppeteer-core");
+const url = require('url');
+const {scrapeInfo} = require("./functions/pupAndLat.js");
 
 let win;
-let invisibleWin;
 
 ipcMain.on('getPath', async (event, data) => {
   const path = await dialog.showOpenDialog(win, {
@@ -17,49 +16,93 @@ ipcMain.on('getPath', async (event, data) => {
 })
 
 ipcMain.on('beginScraping', async (event,data) => {
-  const page = main();
-  event.reply('sendPage', page);
+    const scrapeData = await scrapeInfo(data);
+
+    event.reply("endScraping", scrapeData);
 })
 
-function createWindow() {
-  win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
-
-  win.loadFile(path.join(__dirname, 'index.html'));
+// Application already running, so we close now
+if (!app.requestSingleInstanceLock()) {
+  app.quit()
 }
 
-app.once('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit()
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let mainWindow = null;
+
+async function createWindow() {
+  let
+    startUrl = '';
+
+  // Create the browser window.
+  mainWindow = new BrowserWindow(
+    {
+      width: 480,
+      height: 460,
+      resizable: process.env.NODE_ENV !== 'Production',
+      maximizable: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        devTools: true
+      }
+    });
+
+  // Add in the devtools
+  // installExtension(REACT_DEVELOPER_TOOLS)
+  //   .then((name) => console.log(`Added Extension:  ${name}`))
+  //   .catch((err) => console.log('An error occurred: ', err));
+  //
+  // installExtension(REDUX_DEVTOOLS)
+  //   .then((name) => console.log(`Added Extension:  ${name}`))
+  //   .catch((err) => console.log('An error occurred: ', err));
+
+  // and load the index.html of the app.
+  if(process.env.NODE_ENV === 'production') {
+    startUrl = url.format({
+      pathname: path.join(__dirname, `index.html`),
+      protocol: 'file:',
+      slashes: true
+    });
+  }
+  else {
+    startUrl = url.format({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file:',
+      slashes: true
+    });
+  }
+
+  await mainWindow.loadURL(startUrl);
+  await mainWindow.openDevTools();
+
+  // Emitted when the window is closed.
+  mainWindow.on('closed', function () {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    mainWindow = null
+  })
+}
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on('ready', createWindow);
+
+// Quit when all windows are closed.
+app.on('window-all-closed', function () {
+  // On OS X it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
 });
 
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
-
-
-
-const main = async (url) => {
-  await pie.initialize(app);
-  const browser = await pie.connect(app, puppeteer);
- 
-  invisibleWin = new BrowserWindow({
-    show: false
-  });
-  const url = "https://example.com/";
-  await window.loadURL(url);
- 
-  const page = await pie.getPage(browser, window);
-  
-  return page;
-};
+app.on('activate', async function () {
+  // On OS X it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) {
+    await createWindow()
+  }
+});

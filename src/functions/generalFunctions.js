@@ -23,8 +23,10 @@ function setPath(newPath) {
 
 function endScraping(e, data) {
     const elem = document.createElement('p');
+    const elem2 = document.createElement('p');
     console.log("DATA", data);
-    elem.innerText = data;
+    elem.innerText = data.title;
+    elem2.innerText = data.abstract;
 
     const target = document.getElementById("pdfyArticle");
 

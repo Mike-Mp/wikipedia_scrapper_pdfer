@@ -2,7 +2,6 @@ const { ipcRenderer} = require('electron')
 const path = require('path');
 const pupAndLatFunctions = require(path.resolve(__dirname, './functions/pupAndLat.js'));
 const errorHandlingFunctions = require(path.resolve(__dirname, './functions/errorHandling.js'));
-const {scrapeInfo} = pupAndLatFunctions;
 
 document.getElementById('getPath').addEventListener('click', getPath);
 document.getElementById('pdfyArticle').addEventListener('click', pdfyArticle);
@@ -22,6 +21,16 @@ function setPath(newPath) {
     pathSpan.innerText = newPath;
 }
 
+function endScraping(e, data) {
+    const elem = document.createElement('p');
+    console.log("DATA", data);
+    elem.innerText = data;
+
+    const target = document.getElementById("pdfyArticle");
+
+    target.parentNode.insertBefore(elem, target.nextSibling);
+}
+
 function pdfyArticle() {
     const urlText = url.value;
     // if (urlText.length === 0) {
@@ -36,16 +45,4 @@ ipcRenderer.on('sendPath', (brap, data) => {
     setPath(filePath);
 })
 
-ipcRenderer.on('sendPage', async (event, data) => {
-    await scrapeInfo(data)
-})
-
-ipcRenderer.on('endScraping', (event, data) => {
-    const elem = document.createElement('p');
-    console.log(data);
-    elem.innerText = data;
-
-    const target = document.getElementById("pdfyArticle");
-
-    target.parentNode.insertBefore(elem, target.nextSibling);
-})
+ipcRenderer.on('endScraping', endScraping);

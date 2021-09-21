@@ -4,7 +4,7 @@ const pupAndLatFunctions = require(path.resolve(__dirname, './functions/pupAndLa
 const errorHandlingFunctions = require(path.resolve(__dirname, './functions/errorHandling.js'));
 
 document.getElementById('getPath').addEventListener('click', getPath);
-document.getElementById('pdfyArticle').addEventListener('click', pdfyArticle);
+document.getElementById('pdfyArticle').addEventListener('click', previewArticle);
 const url = document.getElementById('url');
 
 const pathSpan = document.getElementById('filePath');
@@ -31,13 +31,13 @@ function endScraping(e, data) {
     target.parentNode.insertBefore(elem, target.nextSibling);
 }
 
-function pdfyArticle() {
+function previewArticle() {
     const urlText = url.value;
     // if (urlText.length === 0) {
     //     console.log('empty url text')
     //     return handleUrlError(0)
     // }
-    ipcRenderer.send('beginScraping', urlText);
+    ipcRenderer.send('beginInfoGetting', urlText);
 }
 
 ipcRenderer.on('sendPath', (brap, data) => {
@@ -45,4 +45,4 @@ ipcRenderer.on('sendPath', (brap, data) => {
     setPath(filePath);
 })
 
-ipcRenderer.on('endScraping', endScraping);
+ipcRenderer.on('endInfoGetting', endScraping);

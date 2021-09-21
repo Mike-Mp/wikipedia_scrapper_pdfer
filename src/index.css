@@ -5,3 +5,8 @@ body {
   padding: 2rem;
   background-color: white;
 }
+
+#filePath {
+  border: 1px dashed black;
+  padding: 1px 3px 1px 3px;
+}

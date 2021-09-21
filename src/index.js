@@ -1,7 +1,7 @@
 const {app , BrowserWindow, dialog, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
-const {scrapeInfo} = require("./functions/pupAndLat.js");
+const {previewArticle} = require("./functions/pupAndLat.js");
 
 let win;
 
@@ -15,10 +15,10 @@ ipcMain.on('getPath', async (event, data) => {
   event.reply('sendPath',path)
 })
 
-ipcMain.on('beginScraping', async (event,data) => {
-    const scrapeData = await scrapeInfo(data);
+ipcMain.on('beginInfoGetting', async (event,data) => {
+    const scrapeData = await previewArticle(data);
 
-    event.reply("endScraping", scrapeData);
+    event.reply("endInfoGetting", scrapeData);
 })
 
 // Application already running, so we close now

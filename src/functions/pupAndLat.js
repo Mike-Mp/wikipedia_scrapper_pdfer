@@ -3,7 +3,7 @@ const browserFetcher = puppeteer.createBrowserFetcher();
 const latex = require('node-latex');
 const fs = require('fs');
 
-const scrapeInfo = async (urlText) => {
+const previewArticle = async (urlText) => {
     console.log("URL COMING TO SCRAPER: ", urlText)
     console.log(puppeteer)
 
@@ -14,8 +14,8 @@ const scrapeInfo = async (urlText) => {
         await page.goto(urlText);
 
         await page.waitForSelector('h1');
-        const textContent = await page.evaluate(() => document.querySelector('h1').textContent);
-        console.log('Page title = ' + textContent);
+        const title = await page.evaluate(() => document.querySelector('h1').textContent);
+        console.log('Page title = ' + title);
 
 
         await browser.close();
@@ -29,10 +29,10 @@ const scrapeInfo = async (urlText) => {
 }
 
 const createPdf = async () => {
-    
+
 }
 
 module.exports = {
-    scrapeInfo,
+    previewArticle,
     createPdf
 }

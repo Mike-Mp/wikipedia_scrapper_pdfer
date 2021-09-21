@@ -1,11 +1,13 @@
 const puppeteer = require("puppeteer");
+const browserFetcher = puppeteer.createBrowserFetcher();
 
 const scrapeInfo = async (urlText) => {
     console.log("URL COMING TO SCRAPER: ", urlText)
     console.log(puppeteer)
 
     try {
-    const browser = await puppeteer.launch();
+    const revisionInfo = await browserFetcher.download('901912');
+    const browser = await puppeteer.launch({executablePath: revisionInfo.executablePath});
     const page = await browser.newPage();
     await page.goto(urlText);
 
@@ -22,9 +24,9 @@ const scrapeInfo = async (urlText) => {
         console.log(err);
     }
 
+//  r901912
 
-
-    }
+}
 
 module.exports = {
     scrapeInfo

@@ -36,8 +36,8 @@ ipcRenderer.on('sendPath', (brap, data) => {
     setPath(filePath);
 })
 
-ipcRenderer.on('sendPage', (event, data) => {
-    scrapeInfo(data)
+ipcRenderer.on('sendPage', async (event, data) => {
+    await scrapeInfo(data)
 })
 
 ipcRenderer.on('endScraping', (event, data) => {

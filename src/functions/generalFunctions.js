@@ -4,7 +4,7 @@ const pupAndLatFunctions = require(path.resolve(__dirname, './functions/pupAndLa
 const errorHandlingFunctions = require(path.resolve(__dirname, './functions/errorHandling.js'));
 
 document.getElementById('getPath').addEventListener('click', getPath);
-document.getElementById('pdfyArticle').addEventListener('click', previewArticle);
+document.getElementById('previewArticle').addEventListener('click', previewArticle);
 const url = document.getElementById('url');
 
 const pathSpan = document.getElementById('filePath');
@@ -22,20 +22,22 @@ function setPath(newPath) {
 }
 
 function endScraping(e, data) {
-    const elem = document.createElement('p');
-    const elem2 = document.createElement('p');
-    const elem3 = document.createElement('img');
+    const div = document.createElement('div');
+    const title = document.createElement('p');
+    const extract = document.createElement('p');
+    const img = document.createElement('img');
     console.log("DATA", data);
     console.log("source?", data.image.thumbnail.source);
-    elem.innerText = data.title;
-    elem2.innerText = data.extract;
-    elem3.src = data.image.thumbnail.source;
+    title.innerText = data.title;
+    const shortExtract = data.extract.substring(0, 250);
+    extract.innerText = shortExtract + "...";
+    img.src = data.image.thumbnail.source;
 
     const target = document.getElementById("pdfyArticle");
 
-    target.parentNode.insertBefore(elem, target.nextSibling);
-    target.parentNode.insertBefore(elem2, target.nextSibling);
-    target.parentNode.insertBefore(elem3, target.nextSibling);
+    target.parentNode.insertBefore(div, target.nextSibling);
+
+    div.append(title, img, extract);
 }
 
 function previewArticle() {

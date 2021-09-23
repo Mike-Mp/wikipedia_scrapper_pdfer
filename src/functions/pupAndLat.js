@@ -16,10 +16,11 @@ const previewArticle = async (urlText) => {
 
             );
 
-        console.log(data)
+        console.log(data);
 
-        // return {title, abstract};
-        return;
+        const {title, extract, image} = data;
+
+        return {title, extract, image};
 
     } catch(err) {
         console.log(err);

@@ -2,11 +2,11 @@ const wiki = require('wikijs').default;
 const latex = require('node-latex');
 const fs = require('fs');
 
-const previewArticle = async (urlText) => {
-    console.log("URL COMING TO SCRAPER: ", urlText)
+const previewArticle = async (articleTitle) => {
+    console.log("URL COMING TO SCRAPER: ", articleTitle)
 
     try {
-        let data = await wiki().page(urlText).then(page =>
+        let data = await wiki().page(articleTitle).then(page =>
             page
                 .chain()
                 .summary()
@@ -26,7 +26,22 @@ const previewArticle = async (urlText) => {
 
 }
 
-const createPdf = async () => {
+const createPdf = async (articleTitle, filePath) => {
+    console.log("PDFY FUNCTION BEGIN: ", articleTitle);
+
+    try {
+        let data = await wiki().page(articleTitle).then(page =>
+            page
+                .chain()
+                .content()
+                .image()
+                .request()
+            );
+
+        
+    } catch(err) {
+        console.log("createPdf: ");
+    }
 
 }
 

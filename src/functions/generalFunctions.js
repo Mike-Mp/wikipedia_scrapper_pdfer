@@ -5,6 +5,8 @@ const errorHandlingFunctions = require(path.resolve(__dirname, './functions/erro
 
 document.getElementById('getPath').addEventListener('click', getPath);
 document.getElementById('previewArticle').addEventListener('click', previewArticle);
+document.getElementById('pdfyArticle').addEventListener('click', pdfyArticle);
+
 const url = document.getElementById('url');
 
 const pathSpan = document.getElementById('filePath');
@@ -44,12 +46,19 @@ function endScraping(e, data) {
 }
 
 function previewArticle() {
-    const urlText = url.value;
-    // if (urlText.length === 0) {
+    const articleTitle = url.value;
+    // if (articleTitle.length === 0) {
     //     console.log('empty url text')
     //     return handleUrlError(0)
     // }
-    ipcRenderer.send('beginInfoGetting', urlText.toLowerCase());
+    ipcRenderer.send('beginInfoGetting', articleTitle.toLowerCase());
+}
+
+function pdfyArticle() {
+    const articleTitle = url.value;
+    const pathString = pathSpan.innerText;
+
+    ipcRenderer.send('beginPdfying', {articleTitle, pathString})
 }
 
 ipcRenderer.on('sendPath', (brap, data) => {

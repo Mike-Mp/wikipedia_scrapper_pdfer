@@ -22,7 +22,7 @@ ipcMain.on('beginInfoGetting', async (event,data) => {
 });
 
 ipcMain.on('beginPdfying', async (event, data) => {
-    const response = await createPdf();
+    const response = await createPdf(data.articleTitle, data.pathString);
 
     event.reply('endPdfying', response);
 })

@@ -16,14 +16,12 @@ const previewArticle = async (urlText) => {
 
             );
 
-        console.log(data);
-
         const {title, extract, image} = data;
 
         return {title, extract, image};
 
     } catch(err) {
-        console.log(err);
+        console.log("Preview Article: ", err);
     }
 
 }

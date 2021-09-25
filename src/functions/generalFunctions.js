@@ -22,12 +22,15 @@ function setPath(newPath) {
 }
 
 function endScraping(e, data) {
+    if (document.getElementById('previewDiv')) {
+        document.getElementById('previewDiv').remove();
+    }
+
     const div = document.createElement('div');
+    div.setAttribute('id', 'previewDiv')
     const title = document.createElement('p');
     const extract = document.createElement('p');
     const img = document.createElement('img');
-    console.log("DATA", data);
-    console.log("source?", data.image.thumbnail.source);
     title.innerText = data.title;
     const shortExtract = data.extract.substring(0, 250);
     extract.innerText = shortExtract + "...";

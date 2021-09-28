@@ -13,12 +13,20 @@ const makeTemplate = (title, content) => {
 
         \\begin{document}
 
+        \\maketitle
+
         \\abstract{${content[0]}}
 
         \\section{${content[1]}}
 
+        ${content[2]}
+
+        \\section{${content[3]}}
+
         \\end{document}
     `
+
+    // console.log(article);
 
     return article;
 }

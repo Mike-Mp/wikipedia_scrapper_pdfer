@@ -40,7 +40,11 @@ const createPdf = async (articleTitle, filePath) => {
             );
 
         const  title = data.title;
-        const content = data.extract.split("\n\n");
+        console.log("DATA NOT SPLITTED: ", data.extract);
+        // =* (\w+ )+=*\n
+        const content = data.extract.split(/(=+ (\S* )+=+)/g);
+
+        console.log(content);
 
         await structurePdf(filePath, title, content);
     } catch(err) {
@@ -51,6 +55,7 @@ const createPdf = async (articleTitle, filePath) => {
 
 const structurePdf = async (filePath, title, content) => {
     const endDocument = makeTemplate(title, content);
+
 
     fs.writeFile(filePath + '/errorLog.log', "", function(err) {
         if (err) {
@@ -74,7 +79,7 @@ const structurePdf = async (filePath, title, content) => {
     // });
 
     const output = fs.createWriteStream(filePath + `/${title}.pdf`);
-    const pdf = latex(input, {cmd: "pdflatex", errorLogs: filePath + "/errorLog.log"});
+    const pdf = latex(input, {cmd: "pdflatex", errorLogs: filePath + `/${title}_ERROR.log`});
 
     pdf.pipe(output);
     pdf.on('error', err => console.error("lel: ", err));

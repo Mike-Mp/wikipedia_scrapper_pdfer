@@ -40,10 +40,7 @@ const createPdf = async (articleTitle, filePath) => {
             );
 
         const  title = data.title;
-        console.log("DATA NOT SPLITTED: ", data.extract);
-        const content = data.extract.split(/(=+ (\S* )+=+)/g);
-
-        console.log(content);
+        const content = data.extract.split(/(=+ (?:\S* )+=+)/g);
 
         await structurePdf(filePath, title, content);
     } catch(err) {

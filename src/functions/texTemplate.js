@@ -1,3 +1,5 @@
+const characterList = require("./characterList");
+
 const makeTemplate = (title, content) => {
 
     let article = 
@@ -17,17 +19,35 @@ const makeTemplate = (title, content) => {
 
         \\abstract{${content[0]}}
 
-        \\section{${content[1]}}
-
-        ${content[2]}
-
-        \\end{document}
     `
 
-    // console.log(article);
+    for (i=1;i < content.length;i++) {
+        if (content[i].startsWith("===")) {
+                let modifiedContent = content[i].replace(/[=]*/g, "")
+                article += `\n\\subsection{${modifiedContent}}`
+            } else if (content[i].startsWith("==")) {
+                let modifiedContent = content[i].replace(/[=]*/g, "")
+                article += `\n\\section{${modifiedContent}}`
+            }
+            article += `\n${content[i]}`
+    };
+
+
+    article = article.replace(/=+ (\S* )+=+/g, "")
+
+    article += `\n\\end{document}`
+
+    for (key in characterList) {
+        const value = characterList[key]; // a, b -> A, B
+        article = article.replaceAll(key, value);  
+    }
+
+    console.log(article);
 
     return article;
 }
+
+
 
 module.exports = {
     makeTemplate

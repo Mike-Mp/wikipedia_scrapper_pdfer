@@ -41,7 +41,6 @@ const createPdf = async (articleTitle, filePath) => {
 
         const  title = data.title;
         console.log("DATA NOT SPLITTED: ", data.extract);
-        // =* (\w+ )+=*\n
         const content = data.extract.split(/(=+ (\S* )+=+)/g);
 
         console.log(content);

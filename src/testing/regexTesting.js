@@ -14,6 +14,10 @@ In September 1975, MOS Technology debuted the 6502 microprocessor for $25 at the
 
 `;
 
-let splittedContent = content.split(/(=+ (\S* )+=+)/gm);
+const splitter = () => {
+    let splittedContent = content.split(/(=+ (?:\S* )+=+)/g);
 
-console.log(splittedContent);
+    return splittedContent;
+}
+
+module.exports = {splitter}

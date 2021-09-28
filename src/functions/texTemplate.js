@@ -21,8 +21,6 @@ const makeTemplate = (title, content) => {
 
         ${content[2]}
 
-        \\section{${content[3]}}
-
         \\end{document}
     `
 

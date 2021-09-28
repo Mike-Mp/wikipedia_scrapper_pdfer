@@ -10,6 +10,8 @@ const makeTemplate = (title, content) => {
         \\usepackage[utf8]{inputenc}
         \\usepackage{textalpha}
         \\usepackage{textcomp}
+        \\usepackage[mathletters]{ucs}
+        \\usepackage{libertine}
 
         \\title{${title}}
 
@@ -18,6 +20,8 @@ const makeTemplate = (title, content) => {
         \\maketitle
 
         \\abstract{${content[0]}}
+
+        \\pagebreak
 
     `
 

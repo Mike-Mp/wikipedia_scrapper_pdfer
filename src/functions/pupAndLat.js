@@ -75,7 +75,7 @@ const structurePdf = async (filePath, title, content) => {
     // });
 
     const output = fs.createWriteStream(filePath + `/${title}.pdf`);
-    const pdf = latex(input, {cmd: "pdflatex", errorLogs: filePath + `/${title}_ERROR.log`});
+    const pdf = latex(input, {cmd: "xelatex", errorLogs: filePath + `/${title}_ERROR.log`});
 
     pdf.pipe(output);
     pdf.on('error', err => console.error("lel: ", err));

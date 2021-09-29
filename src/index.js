@@ -2,6 +2,7 @@ const {app , BrowserWindow, dialog, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
 const {previewArticle, createPdf} = require("./functions/pupAndLat.js");
+const {handleUrlError, handlePathError} = require("./functions/errorHandling.js");
 
 let win;
 
@@ -16,12 +17,26 @@ ipcMain.on('getPath', async (event, data) => {
 })
 
 ipcMain.on('beginInfoGetting', async (event,data) => {
+    const code = handleUrlError(data);
+
+    if (code !== undefined) {
+      event.reply("errorHappened", code)
+      return;
+    }
+
     const scrapeData = await previewArticle(data);
 
     event.reply("endInfoGetting", scrapeData);
 });
 
 ipcMain.on('beginPdfying', async (event, data) => {
+    const code = handlePathError(data.articleTitle, data.pathString);
+
+    if (code !== undefined) {
+      event.reply("errorHappened", code)
+      return;
+    }
+
     const response = await createPdf(data.articleTitle, data.pathString);
 
     event.reply('endPdfying', response);

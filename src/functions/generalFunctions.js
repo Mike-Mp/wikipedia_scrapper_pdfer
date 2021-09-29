@@ -1,7 +1,4 @@
 const { ipcRenderer} = require('electron')
-const path = require('path');
-const pupAndLatFunctions = require(path.resolve(__dirname, './functions/pupAndLat.js'));
-const errorHandlingFunctions = require(path.resolve(__dirname, './functions/errorHandling.js'));
 
 document.getElementById('getPath').addEventListener('click', getPath);
 document.getElementById('previewArticle').addEventListener('click', previewArticle);
@@ -47,10 +44,6 @@ function endScraping(e, data) {
 
 function previewArticle() {
     const articleTitle = url.value;
-    // if (articleTitle.length === 0) {
-    //     console.log('empty url text')
-    //     return handleUrlError(0)
-    // }
     ipcRenderer.send('beginInfoGetting', articleTitle.toLowerCase());
 }
 
@@ -61,9 +54,15 @@ function pdfyArticle() {
     ipcRenderer.send('beginPdfying', {articleTitle, pathString})
 }
 
+function errorMessaging(event, errorCode) {
+    console.log("errorCode: ", errorCode);
+}
+
 ipcRenderer.on('sendPath', (brap, data) => {
     const filePath = data.filePaths[0];
     setPath(filePath);
 })
 
 ipcRenderer.on('endInfoGetting', endScraping);
+
+ipcRenderer.on('errorHappened', errorMessaging)

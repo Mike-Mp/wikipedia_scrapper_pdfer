@@ -42,7 +42,7 @@ const makeTemplate = (title, content) => {
     article += `\n\\end{document}`
 
     for (key in characterList) {
-        const value = characterList[key]; // a, b -> A, B
+        const value = characterList[key];
         article = article.replaceAll(key, value);  
     }
 

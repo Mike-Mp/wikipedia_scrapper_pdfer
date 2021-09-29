@@ -14,10 +14,14 @@ const previewArticle = async (articleTitle) => {
                 .image()
                 .links()
                 .request()
+                .backlinks()
 
             );
 
         const {title, extract, image} = data;
+
+        console.log(extract)
+        console.log(backlinks)
 
         return {title, extract, image};
 

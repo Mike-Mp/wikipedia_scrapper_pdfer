@@ -33,7 +33,7 @@ function endScraping(e, data) {
     title.innerText = data.title;
     const shortExtract = data.extract.substring(0, 250);
     extract.innerText = shortExtract + "...";
-    img.src = data.image.thumbnail.source;
+    // img.src = data.image?.thumbnail?.source;
 
     const target = document.getElementById("pdfyArticle");
 
@@ -56,6 +56,29 @@ function pdfyArticle() {
 
 function errorMessaging(event, errorCode) {
     console.log("errorCode: ", errorCode);
+    document.getElementById('errorBox');
+    if (document.getElementById('errorBox')) {
+       document.getElementById('errorBox').remove();
+    }
+
+    const div = document.createElement('div');
+    div.setAttribute('id', 'errorBox');
+
+    const errorMessage = document.createElement('p');
+
+    if (errorCode === 1) {
+        errorMessage.innerText = "No input provided";
+    } else if (errorCode === 2) {
+        errorMessage.innerText = 'Provided link instead of article'
+    } else if (errorCode === 3) {
+        errorMessage.innerText = 'No download file path specified'
+    }
+
+    const target = document.getElementById('pdfyArticle');
+
+    target.parentNode.insertBefore(div, target.nextSibling);
+
+    div.append(errorMessage);
 }
 
 ipcRenderer.on('sendPath', (brap, data) => {

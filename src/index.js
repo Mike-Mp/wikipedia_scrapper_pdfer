@@ -31,7 +31,7 @@ ipcMain.on('beginInfoGetting', async (event,data) => {
 
 ipcMain.on('beginPdfying', async (event, data) => {
     const code = handlePathError(data.articleTitle, data.pathString);
-
+    
     if (code !== undefined) {
       event.reply("errorHappened", code)
       return;

@@ -1,7 +1,7 @@
 const wiki = require('wikijs').default;
 const latex = require('node-latex');
 const fs = require('fs');
-const {makeTemplate} = require(".//texTemplate");
+const {makeTemplate} = require("./texTemplate");
 
 const previewArticle = async (articleTitle) => {
     console.log("URL COMING TO SCRAPER: ", articleTitle)
@@ -11,24 +11,39 @@ const previewArticle = async (articleTitle) => {
             page
                 .chain()
                 .summary()
-                .image()
                 .links()
                 .request()
-                .backlinks()
 
             );
 
-        const {title, extract, image} = data;
+        const {title, extract} = data;
 
         console.log(extract)
-        console.log(backlinks)
 
-        return {title, extract, image};
+        if (extract.toLowerCase().startsWith(`${title.toLowerCase()} may refer to`)) {
+            const data = await getOtherResults(articleTitle);
+
+            const {results, query} = data;
+
+            return {results, query};
+        }
+
+        return {title, extract};
 
     } catch(err) {
         console.log("Preview Article: ", err);
     }
 
+}
+
+const getOtherResults = async(articleTitle) => {
+    try {
+        const data = await wiki().search(articleTitle);
+
+        return data;
+    } catch(err) {
+        console.log("Get other results error: ", err);
+    }
 }
 
 const createPdf = async (articleTitle, filePath) => {
@@ -57,9 +72,9 @@ const structurePdf = async (filePath, title, content) => {
     const endDocument = makeTemplate(title, content);
 
 
-    fs.writeFile(filePath + '/errorLog.log', "", function(err) {
+    fs.writeFile(filePath + `/${title}_ERROR.log`, "", function(err) {
         if (err) {
-            console.log("LOG: ", err)
+            console.log("LOG CREATION ERROR: ", err)
         }
 
         console.log("log file created")
@@ -73,10 +88,6 @@ const structurePdf = async (filePath, title, content) => {
     });
 
     const input = fs.createReadStream(filePath + `/${title}.tex`)
-
-    // fs.readFile(filePath + `${title}.tex`, 'utf8', function(err, data) {
-    //     console.log("tex file contents: ", data);
-    // });
 
     const output = fs.createWriteStream(filePath + `/${title}.pdf`);
     const pdf = latex(input, {cmd: "xelatex", errorLogs: filePath + `/${title}_ERROR.log`});

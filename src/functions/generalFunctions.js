@@ -20,7 +20,12 @@ function setPath(newPath) {
     pathSpan.innerText = newPath;
 }
 
-function endScraping(e, data) {
+function endScraping (e, data) {
+    if (data.results) {
+        showResults(data);
+        return;
+    }
+
     if (document.getElementById('previewDiv')) {
         document.getElementById('previewDiv').remove();
     }
@@ -29,17 +34,64 @@ function endScraping(e, data) {
     div.setAttribute('id', 'previewDiv')
     const title = document.createElement('p');
     const extract = document.createElement('p');
-    const img = document.createElement('img');
     title.innerText = data.title;
     const shortExtract = data.extract.substring(0, 250);
     extract.innerText = shortExtract + "...";
-    // img.src = data.image?.thumbnail?.source;
 
     const target = document.getElementById("pdfyArticle");
 
     target.parentNode.insertBefore(div, target.nextSibling);
 
-    div.append(title, img, extract);
+    div.append(title, extract);
+}
+
+function showResults({results, query}) {
+    console.log("if data results")
+    if (document.getElementById("resultsDiv")) {
+        document.getElementById('resultsDiv').remove();
+    }
+
+    if (document.getElementById("closeResults")) {
+        document.getElementById("closeResutls").remove()
+    }
+
+    const div = document.createElement('div');
+    div.setAttribute("id", "resultsDiv");
+
+    const message = document.createElement('p');
+    message.innerText = `${query} may refer to: `
+    const select = document.createElement('select');
+
+    for(let i=0;i<results.length;i++) {
+        const option = document.createElement('option');
+
+        option.setAttribute('value', results[i]);
+        option.innerText = results[i];
+
+        select.append(option);
+    }
+
+    div.append(message, select);
+
+    const target = document.getElementById("pdfyArticle");
+
+    target.parentNode.insertBefore(div, target.nextSibling);
+
+    const closeResults = document.createElement('button');
+
+    closeResults.addEventListener('click', () => {
+        div.remove();
+        closeResults.remove();
+    });
+
+    closeResults.setAttribute('id', 'closeResults');
+    closeResults.innerText = "Close Results";
+
+    div.parentNode.insertBefore(closeResults, div.nextSibling);
+
+    select.addEventListener('change', function() {
+        document.getElementById('url').value = this.value;
+    });
 }
 
 function previewArticle() {
@@ -52,6 +104,10 @@ function pdfyArticle() {
     const pathString = pathSpan.innerText;
 
     ipcRenderer.send('beginPdfying', {articleTitle, pathString})
+}
+
+function endPdfying() {
+
 }
 
 function errorMessaging(event, errorCode) {

@@ -24,9 +24,14 @@ ipcMain.on('beginInfoGetting', async (event,data) => {
       return;
     }
 
-    const scrapeData = await previewArticle(data);
+    try {
+      const scrapeData = await previewArticle(data);
+      console.log("SCRAPE DATA: ", scrapeData)
+      event.reply("endInfoGetting", scrapeData);
+    } catch(err) {
+      console.log("main beginInfoGetting Error: ", err)
+    }
 
-    event.reply("endInfoGetting", scrapeData);
 });
 
 ipcMain.on('beginPdfying', async (event, data) => {

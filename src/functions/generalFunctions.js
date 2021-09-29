@@ -107,7 +107,21 @@ function pdfyArticle() {
 }
 
 function endPdfying() {
+    if (document.getElementById("endPdfyingMessage")) {
+        document.getElementById("endPdfyingMessage").remove();
+    }
 
+    const div = document.createElement('div');
+    div.setAttribute('id', 'endPdfyingMessage');
+    const p = document.createElement('p');
+
+    p.innerText = 'process complete'
+
+    div.append(p);
+
+    const target = document.getElementById('pdfyArticle');
+
+    target.parentNode.insertBefore(div, target.nextSibling);
 }
 
 function errorMessaging(event, errorCode) {
@@ -143,5 +157,7 @@ ipcRenderer.on('sendPath', (brap, data) => {
 })
 
 ipcRenderer.on('endInfoGetting', endScraping);
+
+ipcRenderer.on('endPdfying', endPdfying);
 
 ipcRenderer.on('errorHappened', errorMessaging)

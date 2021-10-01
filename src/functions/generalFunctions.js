@@ -38,7 +38,7 @@ function endScraping (e, data) {
     const shortExtract = data.extract.substring(0, 250);
     extract.innerText = shortExtract + "...";
 
-    const target = document.getElementById("pdfyArticle");
+    const target = document.getElementsByClassName("pButtons")[0];
 
     target.parentNode.insertBefore(div, target.nextSibling);
 
@@ -73,7 +73,7 @@ function showResults({results, query}) {
 
     div.append(message, select);
 
-    const target = document.getElementById("pdfyArticle");
+    const target = document.getElementsByClassName("pButtons")[0];
 
     target.parentNode.insertBefore(div, target.nextSibling);
 
@@ -119,7 +119,7 @@ function endPdfying() {
 
     div.append(p);
 
-    const target = document.getElementById('pdfyArticle');
+    const target = document.getElementsByClassName('pButtons')[0];
 
     target.parentNode.insertBefore(div, target.nextSibling);
 }
@@ -144,7 +144,7 @@ function errorMessaging(event, errorCode) {
         errorMessage.innerText = 'No download file path specified'
     }
 
-    const target = document.getElementById('pdfyArticle');
+    const target = document.getElementsByClassName('pButtons')[0];
 
     target.parentNode.insertBefore(div, target.nextSibling);
 

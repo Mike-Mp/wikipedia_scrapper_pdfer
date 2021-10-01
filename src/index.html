@@ -6,21 +6,34 @@
     <link rel="stylesheet" href="index.css">
   </head>
   <body>
-    <p>Enter wiki link or search term. The first search item will be used.</p>
-
-    <input type="text" placeholder="enter url or search term" id="url"/>
-    <button id="previewArticle">Preview</button>
-    <button id="pdfyArticle">Pdfy</button>
-    <p>Path: <span id="filePath"></span></p>
-    <button id="getPath">Path</button>
-    <p>What to include from the article</p>
-    <hr/>
-    <div class="wikiOptions">
-     <label for="abstract">abstract</label>
-     <input id="abstract" type="checkbox" />
-     <label for="bibliography">bibliography</label>
-     <input type="checkbox" id="bibliography" />
+    
+    <div class="header">
+      <h4>wikipedia_scrapper_pdfyer</h1>
+      <a id="infoButton">Info</a>
     </div>
+    <div class="mainBody">
+      <input type="text" placeholder="enter search term" id="url"/>
+      <div class="pButtons">
+        <a id="previewArticle">Preview</a>
+        <a id="pdfyArticle">Pdfy</a>
+      </div>
+    </div>
+    <hr/>
+    <div class="pathDiv">
+     <p>Path: <span id="filePath"></span></p>
+     <a id="getPath">Path</a>
+    </div>
+    <hr/>
+    <div class="whatToIncludeDiv">
+      <p>What to include from the article</p>
+      <div class="wikiOptions">
+       <label for="abstract">abstract</label>
+       <input id="abstract" type="checkbox" />
+       <label for="bibliography">bibliography</label>
+       <input type="checkbox" id="bibliography" />
+      </div>
+    </div>
+    
 
     <script src='./functions/generalFunctions.js'></script>
   </body>

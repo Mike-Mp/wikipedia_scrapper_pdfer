@@ -103,10 +103,19 @@ function pdfyArticle() {
     const articleTitle = url.value;
     const pathString = pathSpan.innerText;
 
+    const processMessage = document.getElementById('processMessage')
+
+    if (processMessage) {
+        processMessage.innerText = "process started"
+    } else {
+        let e = 1
+        processDiv(e);
+    }
+
     ipcRenderer.send('beginPdfying', {articleTitle, pathString})
 }
 
-function endPdfying() {
+function processDiv(e, response = undefined) {
     if (document.getElementById("endPdfyingMessage")) {
         document.getElementById("endPdfyingMessage").remove();
     }
@@ -115,7 +124,18 @@ function endPdfying() {
     div.setAttribute('id', 'endPdfyingMessage');
     const p = document.createElement('p');
 
-    p.innerText = 'process complete'
+    p.setAttribute('id', 'processMessage');
+
+    if (response !== undefined) {
+        console.log(response)
+        p.innerText = response
+    } else if (e === 1) {
+        p.innerText = 'process started';
+    }
+    else {
+        p.innerText = 'process complete'
+    }
+
 
     div.append(p);
 
@@ -158,6 +178,6 @@ ipcRenderer.on('sendPath', (brap, data) => {
 
 ipcRenderer.on('endInfoGetting', endScraping);
 
-ipcRenderer.on('endPdfying', endPdfying);
+ipcRenderer.on('endPdfying', processDiv);
 
 ipcRenderer.on('errorHappened', errorMessaging)

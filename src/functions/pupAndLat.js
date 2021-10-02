@@ -1,6 +1,7 @@
 const wiki = require('wikijs').default;
 const latex = require('node-latex');
 const fs = require('fs');
+const path = require('path');
 const {makeTemplate} = require("./texTemplate");
 
 const previewArticle = async (articleTitle) => {
@@ -64,6 +65,7 @@ const createPdf = async (articleTitle, filePath) => {
         await structurePdf(filePath, title, content);
     } catch(err) {
         console.log("createPdf: ", err);
+        return err;
     }
 
 }
@@ -71,8 +73,22 @@ const createPdf = async (articleTitle, filePath) => {
 const structurePdf = async (filePath, title, content) => {
     const endDocument = makeTemplate(title, content);
 
+    title = title.replace(/\s/g, '');
 
-    fs.writeFile(filePath + `/${title}_ERROR.log`, "", function(err) {
+    const newFolder = path.resolve(filePath, title)
+    const errorLog = path.resolve(newFolder, `${title}_ERRORS.log`)
+    const texFile = path.resolve(newFolder, `${title}_TEX.tex`)
+    const pdfFile = path.resolve(newFolder, `${title}_PDF.pdf`)
+
+    fs.mkdir(newFolder, {recursive: true}, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+        console.log('Directory created successfully!');
+    });
+
+
+    fs.writeFile(errorLog, "", function(err) {
         if (err) {
             console.log("LOG CREATION ERROR: ", err)
         }
@@ -80,17 +96,17 @@ const structurePdf = async (filePath, title, content) => {
         console.log("log file created")
     })
 
-    fs.writeFile(filePath + `/${title}.tex`, endDocument, function(err) {
+    fs.writeFile(texFile, endDocument, function(err) {
         if (err) {
             console.log("texFile Err", err)
         }
         console.log("tex structured");
     });
 
-    const input = fs.createReadStream(filePath + `/${title}.tex`)
+    const input = fs.createReadStream(texFile)
 
-    const output = fs.createWriteStream(filePath + `/${title}.pdf`);
-    const pdf = latex(input, {cmd: "xelatex", errorLogs: filePath + `/${title}_ERROR.log`});
+    const output = fs.createWriteStream(pdfFile);
+    const pdf = latex(input, {cmd: "xelatex", errorLogs: errorLog});
 
     pdf.pipe(output);
     pdf.on('error', err => console.error("lel: ", err));

@@ -11,8 +11,6 @@ ipcMain.on('getPath', async (event, data) => {
     properties: ['openDirectory']
   })
 
-  console.log(path);
-
   event.reply('sendPath',path)
 })
 
@@ -33,8 +31,6 @@ ipcMain.on('beginInfoGetting', async (event,data) => {
 
       const data = await getOtherResults(data);
 
-      console.log("DATA", data)
-
       event.reply("endInfoGetting", data);
     }
 
@@ -54,21 +50,6 @@ ipcMain.on('beginPdfying', async (event, data) => {
     } catch(err) {
       console.log('main beginPdf', err)
     }
-
-
-    // if (response.message.startsWith("No article found")) {
-    //   try {
-    //     let searchResponse = await getOtherResults(data.articleTitle).then(res => {res.results, res.query});
-
-    //     console.log("searchResponse", searchResponse)
-
-    //     event.reply('endPdfying', searchResponse);
-    //     return;
-    //   } catch(err) {
-    //       console.log("index search for response", err);
-    //   }
-    // }
-
 })
 
 // Application already running, so we close now

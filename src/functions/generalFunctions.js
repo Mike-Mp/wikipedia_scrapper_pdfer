@@ -21,7 +21,6 @@ function setPath(newPath) {
 }
 
 function endScraping (e, data) {
-    console.log("BRAAP", data)
     if (data?.results) {
         showResults(data);
         return;
@@ -60,7 +59,7 @@ function showResults({results, query}) {
     div.setAttribute("id", "resultsDiv");
 
     const message = document.createElement('p');
-    message.innerText = `${query} may refer to: `
+    message.innerHTML = `<span class="query">${query}</span> may refer to: `
     const select = document.createElement('select');
 
     for(let i=0;i<results.length;i++) {
@@ -78,7 +77,7 @@ function showResults({results, query}) {
 
     target.parentNode.insertBefore(div, target.nextSibling);
 
-    const closeResults = document.createElement('button');
+    const closeResults = document.createElement('a');
 
     closeResults.addEventListener('click', () => {
         div.remove();

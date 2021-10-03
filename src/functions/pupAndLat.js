@@ -72,8 +72,6 @@ const createPdf = async (articleTitle, filePath) => {
         const  title = data.title;
         const content = data.extract.split(/(=+ (?:\S* )+=+)/g);
 
-        console.log('reachin before struct?')
-
         await structurePdf(filePath, title, content);
     } catch(err) {
         console.log("createPdf: ", err);

@@ -169,3 +169,15 @@ hr {
   height: 1px;
   border: none;
 }
+
+#resultsDiv p {
+  text-align: center;
+}
+
+.query {
+  font-family: LoraMediumItalic;
+}
+
+#closeResults {
+  margin-top: 5px;
+}

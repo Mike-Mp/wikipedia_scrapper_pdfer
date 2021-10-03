@@ -52,7 +52,7 @@ function showResults({results, query}) {
     }
 
     if (document.getElementById("closeResults")) {
-        document.getElementById("closeResutls").remove()
+        document.getElementById("closeResults").remove()
     }
 
     const div = document.createElement('div');
@@ -121,15 +121,15 @@ function processDiv(e, response = undefined) {
     }
 
     const div = document.createElement('div');
+    div.style.marginTop = "10px"
     div.setAttribute('id', 'endPdfyingMessage');
     const p = document.createElement('p');
 
-    p.setAttribute('id', 'processMessage');
+    p.classList.add('processMessage');
 
     if (response?.message) {
         p.innerText = response
     } else if (response?.results) {
-        console.log("LELELELLELELELE");
         showResults(response);
         return;
     }
@@ -138,6 +138,8 @@ function processDiv(e, response = undefined) {
     }
     else {
         p.innerText = 'process complete'
+        p.classList.remove("processMessage");
+        p.classList.add("processMessageComplete")
     }
 
 

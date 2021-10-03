@@ -13,7 +13,7 @@ const handlePathError = (urlText, filePath) => {
     if (errorCode !== undefined) {
         return errorCode;
     }
-    if (filePath.length === 0 || filePath.replace(/\s/g, '').length === 0 || filePath.startsWith("Please choose")) {
+    if (filePath.length === 0 || filePath.replace(/\s/g, '').length === 0 || filePath.startsWith("Please choose") || filePath === "undefined" || filePath === undefined) {
         return 3;
     }
 }

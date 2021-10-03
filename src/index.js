@@ -105,7 +105,9 @@ async function createWindow() {
   }
 
   await mainWindow.loadURL(startUrl);
-  await mainWindow.openDevTools();
+  if (process.env.NODE_ENV !== 'production') {
+    await mainWindow.openDevTools();
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

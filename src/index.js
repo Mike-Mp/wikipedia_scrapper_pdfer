@@ -1,7 +1,7 @@
 const {app , BrowserWindow, dialog, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
-const {previewArticle, createPdf} = require("./functions/pupAndLat.js");
+const {previewArticle, createPdf, getOtherResults} = require("./functions/pupAndLat.js");
 const {handleUrlError, handlePathError} = require("./functions/errorHandling.js");
 
 let win;
@@ -26,10 +26,16 @@ ipcMain.on('beginInfoGetting', async (event,data) => {
 
     try {
       const scrapeData = await previewArticle(data);
-      console.log("SCRAPE DATA: ", scrapeData)
+      
       event.reply("endInfoGetting", scrapeData);
     } catch(err) {
-      console.log("main beginInfoGetting Error: ", err)
+      console.log("main beginInfoGetting", err)
+
+      const data = await getOtherResults(data);
+
+      console.log("DATA", data)
+
+      event.reply("endInfoGetting", data);
     }
 
 });
@@ -42,9 +48,27 @@ ipcMain.on('beginPdfying', async (event, data) => {
       return;
     }
 
-    const response = await createPdf(data.articleTitle, data.pathString);
+    try {
+      const response = await createPdf(data.articleTitle, data.pathString);
+      event.reply('endPdfying', response);
+    } catch(err) {
+      console.log('main beginPdf', err)
+    }
 
-    event.reply('endPdfying', response);
+
+    // if (response.message.startsWith("No article found")) {
+    //   try {
+    //     let searchResponse = await getOtherResults(data.articleTitle).then(res => {res.results, res.query});
+
+    //     console.log("searchResponse", searchResponse)
+
+    //     event.reply('endPdfying', searchResponse);
+    //     return;
+    //   } catch(err) {
+    //       console.log("index search for response", err);
+    //   }
+    // }
+
 })
 
 // Application already running, so we close now
@@ -70,7 +94,7 @@ async function createWindow() {
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
-        devTools: true
+        devTools: true,
       }
     });
 

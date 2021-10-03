@@ -21,7 +21,8 @@ function setPath(newPath) {
 }
 
 function endScraping (e, data) {
-    if (data.results) {
+    console.log("BRAAP", data)
+    if (data?.results) {
         showResults(data);
         return;
     }
@@ -126,10 +127,14 @@ function processDiv(e, response = undefined) {
 
     p.setAttribute('id', 'processMessage');
 
-    if (response !== undefined) {
-        console.log(response)
+    if (response?.message) {
         p.innerText = response
-    } else if (e === 1) {
+    } else if (response?.results) {
+        console.log("LELELELLELELELE");
+        showResults(response);
+        return;
+    }
+     else if (e === 1) {
         p.innerText = 'process started';
     }
     else {

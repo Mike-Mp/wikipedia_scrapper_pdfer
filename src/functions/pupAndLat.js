@@ -33,6 +33,13 @@ const previewArticle = async (articleTitle) => {
 
     } catch(err) {
         console.log("Preview Article: ", err);
+        if (err.message === "No article found") {
+            const data = await getOtherResults(articleTitle)
+
+            const {results, query} = data;
+            return {results, query};
+        }
+        return err;
     }
 
 }
@@ -41,9 +48,12 @@ const getOtherResults = async(articleTitle) => {
     try {
         const data = await wiki().search(articleTitle);
 
+        console.log("DATA", data);
+
         return data;
     } catch(err) {
         console.log("Get other results error: ", err);
+        return err;
     }
 }
 
@@ -62,10 +72,15 @@ const createPdf = async (articleTitle, filePath) => {
         const  title = data.title;
         const content = data.extract.split(/(=+ (?:\S* )+=+)/g);
 
+        console.log('reachin before struct?')
+
         await structurePdf(filePath, title, content);
     } catch(err) {
         console.log("createPdf: ", err);
-        return err;
+        const data = await getOtherResults(articleTitle);
+
+        const {results, query} = data;
+        return {results, query};
     }
 
 }
@@ -115,5 +130,6 @@ const structurePdf = async (filePath, title, content) => {
 
 module.exports = {
     previewArticle,
-    createPdf
+    createPdf,
+    getOtherResults
 }

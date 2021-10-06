@@ -3,7 +3,7 @@ const { ipcRenderer} = require('electron')
 document.getElementById('getPath').addEventListener('click', getPath);
 document.getElementById('previewArticle').addEventListener('click', previewArticle);
 document.getElementById('pdfyArticle').addEventListener('click', pdfyArticle);
-document.getElementById('infoButton').addEventListener('click', showInfo);
+// document.getElementById('infoButton').addEventListener('click', showInfo);
 
 const url = document.getElementById('url');
 
@@ -21,37 +21,37 @@ function setPath(newPath) {
     pathSpan.innerText = newPath;
 }
 
-function showInfo() {
-    const infoBox = document.createElement("div");
-    infoBox.setAttribute('id', 'infoBox');
+// function showInfo() {
+//     const infoBox = document.createElement("div");
+//     infoBox.setAttribute('id', 'infoBox');
 
-    const p = document.createElement('p');
+//     const p = document.createElement('p');
 
-    p.innerHTML = `
-        <a href="https://github.com/Mike-Mp/wikipedia_scrapper_pdfer" target="_blank">Code</a>.
-    `
+//     p.innerHTML = `
+//         <a href="https://github.com/Mike-Mp/wikipedia_scrapper_pdfer" target="_blank">Code</a>.
+//     `
 
-    const a = document.createElement("a");
+//     const a = document.createElement("a");
 
-    a.setAttribute('id', 'closeInfo');
+//     a.setAttribute('id', 'closeInfo');
 
-    a.addEventListener('click', hideInfo);
+//     a.addEventListener('click', hideInfo);
 
-    a.innerText = "X";
+//     a.innerText = "X";
 
-    infoBox.append(p, a);
+//     infoBox.append(p, a);
 
-    const target = document.getElementsByTagName("header")[0];
+//     const target = document.getElementsByTagName("header")[0];
 
-    target.appendChild(infoBox);
+//     target.appendChild(infoBox);
 
-    document.getElementById('infoButton').style.display = "none";
-}
+//     document.getElementById('infoButton').style.display = "none";
+// }
 
-function hideInfo() {
-    document.getElementById('infoBox').remove();
-    document.getElementById("infoButton").style.display = "block";
-}
+// function hideInfo() {
+//     document.getElementById('infoBox').remove();
+//     document.getElementById("infoButton").style.display = "block";
+// }
 
 function endScraping (e, data) {
     if (data?.results) {
